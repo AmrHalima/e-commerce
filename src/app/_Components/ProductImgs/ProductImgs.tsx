@@ -1,0 +1,68 @@
+"use client";
+
+import { useState } from "react";
+import Image from "next/image";
+import { Heart } from "lucide-react";
+import {
+    Carousel,
+    CarouselContent,
+    CarouselItem,
+    CarouselNext,
+    CarouselPrevious,
+} from "@/components/ui/carousel";
+
+interface ProductImagesProps {
+    coverImage: string;
+    images: string[];
+    title: string;
+}
+
+export default function ProductImages({
+    coverImage,
+    images,
+    title,
+}: ProductImagesProps) {
+    const [selectedImage, setSelectedImage] = useState<string>(coverImage);
+
+    return (
+        <div className="relative md:w-1/2 w-full space-y-4">
+            <div className="relative w-full h-[400px]">
+                <Heart className="absolute top-2 left-2 z-10 text-muted-foreground hover:text-primary transition-colors" />
+                <Image
+                    src={selectedImage}
+                    alt={title}
+                    fill
+                    className="object-cover rounded-md"
+                    quality={75}
+                    priority
+                />
+            </div>
+
+            {images.length > 0 && (
+                <Carousel className="mx-auto w-2/3">
+                    <CarouselContent>
+                        {images.map((img, index) => (
+                            <CarouselItem
+                                key={index}
+                                className="basis-1/3 cursor-pointer"
+                                onClick={() => setSelectedImage(img)}
+                            >
+                                <div className="aspect-square w-full overflow-hidden rounded-md border border-muted">
+                                    <Image
+                                        src={img}
+                                        alt={`Thumbnail ${index}`}
+                                        width={360}
+                                        height={360}
+                                        className="object-cover w-full h-full transition-transform hover:scale-105"
+                                    />
+                                </div>
+                            </CarouselItem>
+                        ))}
+                    </CarouselContent>
+                    <CarouselPrevious />
+                    <CarouselNext />
+                </Carousel>
+            )}
+        </div>
+    );
+}
