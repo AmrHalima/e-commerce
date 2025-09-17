@@ -9,7 +9,7 @@ import { ThemeToggleButton } from "@/components/ui/shadcn-io/theme-toggle-button
 import { useTheme } from "next-themes";
 import Image from "next/image";
 import Link from "next/link";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { useThemeTransition } from "@/components/ui/shadcn-io/theme-toggle-button";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
@@ -20,6 +20,7 @@ import {
 } from "@/components/ui/popover";
 import { LogOut, Menu, Settings, ShoppingCart, User } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
+import { CartContext } from "@/context/CartContext";
 
 export default function Navbar() {
     const { resolvedTheme, setTheme } = useTheme();
@@ -30,6 +31,7 @@ export default function Navbar() {
         });
     };
     const [mounted, setMounted] = useState(false);
+    const { cart, loading } = useContext(CartContext);
     useEffect(() => {
         setMounted(true);
     }, []);
@@ -106,7 +108,7 @@ export default function Navbar() {
                             <div className="flex items-center space-x-2 p-2">
                                 <Avatar className="h-8 w-8">
                                     <AvatarImage
-                                        src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=32&h=32&fit=crop&crop=face"
+                                        src="./loading.svg"
                                         alt="avatar"
                                     />
                                     <AvatarFallback>SC</AvatarFallback>
@@ -163,12 +165,16 @@ export default function Navbar() {
                         />
                     )}
                     {/* Cart */}
-                    <div className="relative p-1.5 cursor-pointer">
-                        <Badge className="absolute top-0 end-0 h-4 min-w-3 rounded-full p-1 text-xs font-semi-bold translate-x-1/2">
-                            800
-                        </Badge>
-                        <ShoppingCart />
-                    </div>
+                    <Link href={"/cart"} aria-label="Cart">
+                        <div className="relative p-1.5 cursor-pointer">
+                            {!loading && cart && cart.numOfCartItems > 0 && (
+                                <Badge className="absolute top-0 end-0 h-4 min-w-3 rounded-full p-1 text-xs font-semi-bold translate-x-1/2">
+                                    {cart.numOfCartItems}
+                                </Badge>
+                            )}
+                            <ShoppingCart />
+                        </div>
+                    </Link>
                     {/* Hamburger for mobile */}
                     <button
                         className="md:hidden ml-2 p-2 rounded focus:outline-none focus:ring"

@@ -51,9 +51,10 @@ export default function ProductImages({
                                     <Image
                                         src={img}
                                         alt={`Thumbnail ${index}`}
-                                        width={360}
-                                        height={360}
+                                        width={150}
+                                        height={150}
                                         className="object-cover w-full h-full transition-transform hover:scale-105"
+                                        quality={30}
                                     />
                                 </div>
                             </CarouselItem>

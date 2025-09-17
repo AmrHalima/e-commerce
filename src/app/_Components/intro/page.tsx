@@ -24,7 +24,7 @@ export default function PageWithExitMask({
             <AnimatePresence>
                 {visible && (
                     <motion.div
-                        className="fixed inset-0 z-50 bg-accent text-black"
+                        className="fixed inset-0 z-50 bg-background"
                         initial={{ clipPath: "circle(150% at 50% 50%)" }}
                         exit={{ clipPath: "circle(0% at 50% 50%)" }}
                         transition={{ duration: 1, ease: "easeInOut" }}

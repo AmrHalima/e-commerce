@@ -1,12 +1,26 @@
 import { Params } from "next/dist/server/request/params";
 import React from "react";
-import { getProducts } from "../page";
-import { Button } from "@/components/ui/button";
+import { getProducts } from "@/services/getProducts";
 import { Card, CardContent, CardTitle } from "@/components/ui/card";
 import { StarIcon } from "lucide-react";
 import ProductImages from "@/app/_Components/ProductImgs/ProductImgs";
 import { Daum } from "@/interface/product";
+import AddToCart from "@/app/_Components/AddToCart/AddToCart";
 
+export async function generateMetadata({ params }: { params: Params }) {
+    const id = (await params).productId;
+    const product: any = await getProducts(id?.toString());
+    if (!product) {
+        return {
+            title: "Product Not Found",
+        };
+    }
+    return {
+        title: product?.data.title,
+        description: product?.data.description,
+        keywords: [product?.data.category.name, product?.data.brand.name],
+    };
+}
 export default async function ProductDetails({ params }: { params: Params }) {
     const { productId } = await params;
     const product = await getProducts(productId?.toString());
@@ -27,6 +41,7 @@ export default async function ProductDetails({ params }: { params: Params }) {
         ratingsAverage,
         ratingsQuantity,
         priceAfterDiscount,
+        id,
     }: Daum = product.data;
 
     const renderStars = (rating: number) => {
@@ -105,13 +120,7 @@ export default async function ProductDetails({ params }: { params: Params }) {
                             {price} EGP
                         </span>
                     </div>
-
-                    <Button
-                        variant="default"
-                        className="w-fit text-sm px-4 py-2"
-                    >
-                        Add to Cart
-                    </Button>
+                    <AddToCart productId={id} />
                 </CardContent>
             </Card>
         </div>
