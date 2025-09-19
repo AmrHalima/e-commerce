@@ -46,7 +46,7 @@ export default function Cart() {
                     Array.isArray(newCart.data.products)
                 ) {
                     newCart.data.products = newCart.data.products.filter(
-                        (p: any) => p && typeof p.product === "object"
+                        (p) => p && typeof p.product === "object"
                     );
                 }
 
@@ -154,7 +154,7 @@ export default function Cart() {
 
         try {
             setLoading(true);
-            await checkOutSession(cart?.cartId!);
+            if (cart) await checkOutSession(cart?.cartId);
             // checkOutSession will redirect on success
         } catch (err) {
             console.error("checkout error:", err);
@@ -204,7 +204,7 @@ export default function Cart() {
                     Your Cart is Empty
                 </h1>
                 <p className="text-muted-foreground mt-1">
-                    Looks like you haven't added anything to your cart yet.
+                    Looks like you haven&apos;t added anything to your cart yet.
                 </p>
                 <Link href={"/products"}>
                     <Button variant={"outline"} className="w-1/3 mt-4 mx-auto">
@@ -226,7 +226,7 @@ export default function Cart() {
                 {/* Items Column */}
                 <div className="lg:col-span-2 space-y-4">
                     {cart?.data?.products?.map(
-                        ({ _id, product, price, count }: any) => {
+                        ({ _id, product, price, count }) => {
                             // guard: if product is invalid, skip
                             if (!product || typeof product === "string")
                                 return null;

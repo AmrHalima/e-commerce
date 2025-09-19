@@ -2,7 +2,6 @@
 
 import { useState } from "react";
 import Image from "next/image";
-import { Heart } from "lucide-react";
 import {
     Carousel,
     CarouselContent,
@@ -16,7 +15,7 @@ interface ProductImagesProps {
     coverImage: string;
     images: string[];
     title: string;
-    id: String;
+    id: string;
 }
 
 export default function ProductImages({

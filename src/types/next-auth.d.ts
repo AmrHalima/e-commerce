@@ -10,6 +10,9 @@ declare module "next-auth" {
         token: string;
     }
 }
+// eslint-disable-next-line @typescript-eslint/no-empty-interface
 declare module "next-auth/jwt" {
-    interface JWT extends User {}
+    interface JWT extends User {
+        id?: string;
+    }
 }

@@ -13,7 +13,7 @@ export default function AddToWishList({
     productId: string;
     isActive?: boolean;
 }) {
-    const [clicked, setClicked] = useState<Boolean>(isActive);
+    const [clicked, setClicked] = useState<boolean>(isActive);
     const [isLoading, setIsLoading] = useState<boolean>(false);
     const { status } = useSession();
     const router = useRouter();

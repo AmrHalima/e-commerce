@@ -73,7 +73,7 @@ const Footer = ({
     },
     sections = defaultSections,
     description = "Halima is your trusted e-commerce brand bringing you quality products and seamless shopping experience.",
-    socialLinks = [],
+   // socialLinks = [],
     copyright = "© 2024 Halima. All rights reserved.",
     legalLinks = defaultLegalLinks,
 }: FooterProps) => {

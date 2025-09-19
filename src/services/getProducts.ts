@@ -1,10 +1,10 @@
 import { Product } from "@/interface/product";
 
 export async function getProducts(
-    product?: String,
-    pageNumber?: Number,
-    category?: String,
-    brand?: String
+    product?: string,
+    pageNumber?: number,
+    category?: string,
+    brand?: string
 ): Promise<Product | null> {
     try {
         const res: Response = await fetch(

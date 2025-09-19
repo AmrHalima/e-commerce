@@ -14,7 +14,6 @@ import AddToCart from "../AddToCart/AddToCart";
 import AddToWishList from "../AddToWishList/AddToWishList";
 import { getWishList } from "@/services/wishlistActions";
 import { getServerSession } from "next-auth";
-import { redirect } from "next/navigation";
 import { authOptions } from "@/app/api/auth/[...nextauth]/route";
 
 export default async function ProductList({
@@ -50,7 +49,7 @@ export default async function ProductList({
 
     return (
         <div className="p-10 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-            {products.data.map((item: any) => {
+            {products.data.map((item) => {
                 const {
                     _id,
                     imageCover,

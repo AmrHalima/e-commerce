@@ -4,22 +4,23 @@ import { getProducts } from "@/services/getProducts";
 import { Card, CardContent, CardTitle } from "@/components/ui/card";
 import { StarIcon } from "lucide-react";
 import ProductImages from "@/app/_Components/ProductImgs/ProductImgs";
-import { Daum } from "@/interface/product";
+import { Daum, Product } from "@/interface/product";
 import AddToCart from "@/app/_Components/AddToCart/AddToCart";
 
 export async function generateMetadata({ params }: { params: Params }) {
     const id = (await params).productId;
-    const product: any = await getProducts(id?.toString());
+    const product: Product | null = await getProducts(id?.toString());
     if (!product) {
         return {
             title: "Product Not Found",
         };
     }
-    return {
-        title: product?.data.title,
-        description: product?.data.description,
-        keywords: [product?.data.category.name, product?.data.brand.name],
-    };
+    if (!Array.isArray(product.data))
+        return {
+            title: product?.data.title,
+            description: product?.data.description,
+            keywords: [product?.data.category.name, product?.data.brand.name],
+        };
 }
 export default async function ProductDetails({ params }: { params: Params }) {
     const { productId } = await params;
