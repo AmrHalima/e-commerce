@@ -1,6 +1,8 @@
 "use client";
 import { Cart } from "@/interface/cart";
-import { addToCart, getCart } from "@/services/cartActions";
+import { getCart } from "@/services/cartActions";
+import { useSession } from "next-auth/react";
+import { useRouter } from "next/navigation";
 import React, { createContext, useEffect, useState } from "react";
 import { toast } from "sonner";
 export const CartContext = createContext<{
@@ -24,13 +26,20 @@ export default function CartContextProvider({
 }) {
     const [cart, setCart] = useState<Cart | null>(null);
     const [loading, setLoading] = useState(true);
+    const { status } = useSession();
+    const router = useRouter();
     const fetchCart = async () => {
         try {
+            if (status === "unauthenticated") {
+                router.push("/login");
+                return;
+            }
             setLoading(true);
             const newCart = await getCart();
             setCart(newCart!);
         } catch (error) {
-            toast.error("Failed to load cart: " + error);
+            if (error instanceof Error)
+                toast.error("Failed to load cart: " + error.message);
         } finally {
             setLoading(false);
         }

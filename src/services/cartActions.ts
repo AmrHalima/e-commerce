@@ -1,92 +1,161 @@
+"use server";
+
 import { Cart } from "@/interface/cart";
-import { i } from "framer-motion/client";
 import { toast } from "sonner";
+import { decode } from "next-auth/jwt";
+import { cookies } from "next/headers";
 
 export async function addToCart(productId?: string) {
-    {
+    const encToken = (await cookies()).get("next-auth.session-token")?.value;
+    const token = await decode({
+        token: encToken,
+        secret: process.env.AUTH_SECRET!,
+    });
+    try {
         const res = await fetch("https://ecommerce.routemisr.com/api/v1/cart", {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
-                token: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY4Yzg4NDFiOTg3MDQyNmEzOTIyZDBkMyIsIm5hbWUiOiJBbXIgWWFzc2VyIEhhbGltYSIsInJvbGUiOiJ1c2VyIiwiaWF0IjoxNzU4MTAzMzcyLCJleHAiOjE3NjU4NzkzNzJ9.gg6cinTe6bCxe2XjFDzawtiD1YZH2GQPvyGYiRVvVNQ",
+                token: token + "",
             },
             body: JSON.stringify({ productId }),
         });
 
         if (!res.ok) {
             toast.error("Failed to add to cart");
-        } else {
-            const cart: Cart = await res.json();
-            return cart;
+            return;
         }
-    }
-}
-export async function getCart() {
-    const res = await fetch(`https://ecommerce.routemisr.com/api/v1/cart`, {
-        method: "GET",
-        headers: {
-            "Content-Type": "application/json",
-            token: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY4Yzg4NDFiOTg3MDQyNmEzOTIyZDBkMyIsIm5hbWUiOiJBbXIgWWFzc2VyIEhhbGltYSIsInJvbGUiOiJ1c2VyIiwiaWF0IjoxNzU4MTAzMzcyLCJleHAiOjE3NjU4NzkzNzJ9.gg6cinTe6bCxe2XjFDzawtiD1YZH2GQPvyGYiRVvVNQ",
-        },
-    });
-    if (!res.ok) {
-        toast.error("Failed to fetch to cart");
-    } else {
+
         const cart: Cart = await res.json();
         return cart;
+    } catch (err) {
+        console.error("addToCart error:", err);
+        toast.error("Something went wrong while adding to cart");
+        return;
+    }
+}
+
+export async function getCart() {
+    const encToken = (await cookies()).get("next-auth.session-token")?.value;
+    const token = await decode({
+        token: encToken,
+        secret: process.env.AUTH_SECRET!,
+    });
+    try {
+        const res = await fetch(`https://ecommerce.routemisr.com/api/v1/cart`, {
+            method: "GET",
+            headers: {
+                "Content-Type": "application/json",
+                token: token + "",
+            },
+        });
+
+        if (!res.ok) {
+            toast.error("Failed to fetch cart");
+            return;
+        }
+
+        const cart: Cart = await res.json();
+        return cart;
+    } catch (err) {
+        console.error("getCart error:", err);
+        toast.error("Something went wrong while fetching cart");
+        return;
     }
 }
 
 export async function removeCartItem(cartItemId: string) {
-    const res = await fetch(
-        `https://ecommerce.routemisr.com/api/v1/cart/${cartItemId}`,
-        {
+    const encToken = (await cookies()).get("next-auth.session-token")?.value;
+    const token = await decode({
+        token: encToken,
+        secret: process.env.AUTH_SECRET!,
+    });
+    try {
+        const res = await fetch(
+            `https://ecommerce.routemisr.com/api/v1/cart/${cartItemId}`,
+            {
+                method: "DELETE",
+                headers: {
+                    token: token + "",
+                },
+            }
+        );
+
+        if (!res.ok) {
+            toast.error("Failed to remove item from cart");
+            return;
+        }
+
+        const cart: Cart = await res.json();
+        return cart;
+    } catch (err) {
+        console.error("removeCartItem error:", err);
+        toast.error("Something went wrong while removing item");
+        return;
+    }
+}
+
+export async function updateCartItem(cartItemId: string, count: number) {
+    const encToken = (await cookies()).get("next-auth.session-token")?.value;
+    const token = await decode({
+        token: encToken,
+        secret: process.env.AUTH_SECRET!,
+    });
+    try {
+        const res = await fetch(
+            `https://ecommerce.routemisr.com/api/v1/cart/${cartItemId}`,
+            {
+                method: "PUT",
+                headers: {
+                    "Content-Type": "application/json",
+                    token: token + "",
+                },
+                body: JSON.stringify({ count }),
+            }
+        );
+
+        if (!res.ok) {
+            toast.error("Failed to update item");
+            return;
+        }
+
+        const cart: Cart = await res.json();
+        return cart;
+    } catch (err) {
+        console.error("updateCartItem error:", err);
+        toast.error("Something went wrong while updating item");
+        return;
+    }
+}
+
+export async function clearCart() {
+    const encToken = (await cookies()).get("next-auth.session-token")?.value;
+    const token = await decode({
+        token: encToken,
+        secret: process.env.AUTH_SECRET!,
+    });
+    try {
+        const res = await fetch(`https://ecommerce.routemisr.com/api/v1/cart`, {
             method: "DELETE",
             headers: {
-                token: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY4Yzg4NDFiOTg3MDQyNmEzOTIyZDBkMyIsIm5hbWUiOiJBbXIgWWFzc2VyIEhhbGltYSIsInJvbGUiOiJ1c2VyIiwiaWF0IjoxNzU4MTAzMzcyLCJleHAiOjE3NjU4NzkzNzJ9.gg6cinTe6bCxe2XjFDzawtiD1YZH2GQPvyGYiRVvVNQ",
+                token: token + "",
             },
+        });
+
+        if (!res.ok) {
+            toast.error("Failed to clear cart");
+            return;
         }
-    );
-    if (!res.ok) {
-        toast.error("Failed to remove item from cart");
-    } else {
+
         const cart: Cart = await res.json();
         return cart;
+    } catch (err) {
+        console.error("clearCart error:", err);
+        toast.error("Something went wrong while clearing cart");
+        return;
     }
 }
-export async function updateCartItem(cartItemId: string, count: number) {
-    const res = await fetch(
-        `https://ecommerce.routemisr.com/api/v1/cart/${cartItemId}`,
-        {
-            method: "PUT",
-            headers: {
-                "Content-Type": "application/json",
-                token: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY4Yzg4NDFiOTg3MDQyNmEzOTIyZDBkMyIsIm5hbWUiOiJBbXIgWWFzc2VyIEhhbGltYSIsInJvbGUiOiJ1c2VyIiwiaWF0IjoxNzU4MTAzMzcyLCJleHAiOjE3NjU4NzkzNzJ9.gg6cinTe6bCxe2XjFDzawtiD1YZH2GQPvyGYiRVvVNQ",
-            },
-            body: JSON.stringify({ count }),
-        }
-    );
-    if (!res.ok) {
-        toast.error("Failed to update item");
-    } else {
-        const cart: Cart = await res.json();
-        return cart;
-    }
-}
-export async function clearCart() {
-    const res = await fetch(`https://ecommerce.routemisr.com/api/v1/cart`, {
-        method: "DELETE",
-        headers: {
-            token: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY4Yzg4NDFiOTg3MDQyNmEzOTIyZDBkMyIsIm5hbWUiOiJBbXIgWWFzc2VyIEhhbGltYSIsInJvbGUiOiJ1c2VyIiwiaWF0IjoxNzU4MTAzMzcyLCJleHAiOjE3NjU4NzkzNzJ9.gg6cinTe6bCxe2XjFDzawtiD1YZH2GQPvyGYiRVvVNQ",
-        },
-    });
-    if (!res.ok) {
-        toast.error("Failed to clear cart");
-    } else {
-        const cart: Cart = await res.json();
-        return cart;
-    }
-}
+
 const shippingAddress = {
     details: "details",
     phone: "01010700999",
@@ -94,23 +163,36 @@ const shippingAddress = {
 };
 
 export async function checkOutSession(cartId: string) {
-    const res = await fetch(
-        `https://ecommerce.routemisr.com/api/v1/orders/checkout-session/${cartId}?url=http://localhost:3000`,
-        {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-                token: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY4Yzg4NDFiOTg3MDQyNmEzOTIyZDBkMyIsIm5hbWUiOiJBbXIgWWFzc2VyIEhhbGltYSIsInJvbGUiOiJ1c2VyIiwiaWF0IjoxNzU4MTAzMzcyLCJleHAiOjE3NjU4NzkzNzJ9.gg6cinTe6bCxe2XjFDzawtiD1YZH2GQPvyGYiRVvVNQ",
-            },
-            body: JSON.stringify({ shippingAddress }),
+    const encToken = (await cookies()).get("next-auth.session-token")?.value;
+    const token = await decode({
+        token: encToken,
+        secret: process.env.AUTH_SECRET!,
+    });
+    try {
+        const res = await fetch(
+            `https://ecommerce.routemisr.com/api/v1/orders/checkout-session/${cartId}?url=http://localhost:3000`,
+            {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    token: token + "",
+                },
+                body: JSON.stringify({ shippingAddress }),
+            }
+        );
+
+        if (!res.ok) {
+            toast.error("Failed to start checkout session");
+            return;
         }
-    );
-    if (!res.ok) {
-        toast.error("Failed to update item");
-    } else {
+
         const data = await res.json();
         if (data?.status === "success") {
             window.location.href = data.session.url;
         }
+    } catch (err) {
+        console.error("checkOutSession error:", err);
+        toast.error("Something went wrong during checkout");
+        return;
     }
 }

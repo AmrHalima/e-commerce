@@ -1,4 +1,5 @@
 "use client";
+
 import {
     NavigationMenu,
     NavigationMenuItem,
@@ -11,48 +12,68 @@ import Image from "next/image";
 import Link from "next/link";
 import { useContext, useEffect, useState } from "react";
 import { useThemeTransition } from "@/components/ui/shadcn-io/theme-toggle-button";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import {
     Popover,
     PopoverContent,
     PopoverTrigger,
 } from "@/components/ui/popover";
-import { LogOut, Menu, Settings, ShoppingCart, User } from "lucide-react";
+import {
+    LogOut,
+    Menu,
+    Settings,
+    ShoppingBag,
+    ShoppingCart,
+    User,
+    User2,
+} from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { CartContext } from "@/context/CartContext";
+import { useSession, signOut } from "next-auth/react";
+import { WishListContext } from "@/context/WishLIstContext";
 
 export default function Navbar() {
+    const session = useSession();
+    const wishlistContext = useContext(WishListContext);
     const { resolvedTheme, setTheme } = useTheme();
     const { startTransition } = useThemeTransition();
+    const [mounted, setMounted] = useState(false);
+    const { cart, loading } = useContext(CartContext);
+    const [mobileOpen, setMobileOpen] = useState(false);
+
+    useEffect(() => {
+        setMounted(true);
+    }, []);
+
     const handleThemeToggle = () => {
         startTransition(() => {
             setTheme(resolvedTheme === "dark" ? "light" : "dark");
         });
     };
-    const [mounted, setMounted] = useState(false);
-    const { cart, loading } = useContext(CartContext);
-    useEffect(() => {
-        setMounted(true);
-    }, []);
-    const [mobileOpen, setMobileOpen] = useState(false);
-    const paths = [
+
+    const basePaths = [
         { name: "Products", href: "/products" },
-        { name: "Cart", href: "/cart" },
         { name: "Brands", href: "/brands" },
         { name: "Categories", href: "/categories" },
-        { name: "Orders", href: "/orders" },
-        { name: "Wishlist", href: "/wishlist" },
     ];
+
+    // add orders only if authenticated
+    const paths =
+        session.status === "authenticated"
+            ? [...basePaths, { name: "Orders", href: "/allorders" }]
+            : basePaths;
+
     return (
-        <nav className="w-full fixed top-0 z-50 bg-background">
-            <div className="container mx-auto flex justify-between items-center md:p-4 p-2 pb-0">
+        <nav className="w-full fixed top-0 z-50 bg-background border-b">
+            <div className="container mx-auto flex justify-between items-center md:p-4 p-2">
                 {/* Logo */}
                 {!mounted ? (
                     <div className="h-[64px] w-[137px]"></div>
                 ) : (
                     <Link href="/">
                         <Image
+                            quality={30}
                             src={
                                 resolvedTheme === "dark"
                                     ? "/logoDark.svg"
@@ -74,9 +95,7 @@ export default function Navbar() {
                                 <NavigationMenuItem key={name}>
                                     <NavigationMenuLink
                                         asChild
-                                        className={
-                                            "lg:p-2 lg:mx-2 lg:flex-row flex flex-col items-center"
-                                        }
+                                        className="lg:p-2 lg:mx-2 lg:flex-row flex flex-col items-center"
                                     >
                                         <Link href={href}>{name}</Link>
                                     </NavigationMenuLink>
@@ -88,70 +107,6 @@ export default function Navbar() {
 
                 {/* Right Side */}
                 <div className="flex items-center gap-2">
-                    {/* Avatar Popover */}
-                    <Popover>
-                        <PopoverTrigger asChild>
-                            <Button
-                                variant="ghost"
-                                className="relative h-8 w-8 rounded-full"
-                            >
-                                <Avatar className="h-8 w-8">
-                                    <AvatarImage
-                                        src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=32&h=32&fit=crop&crop=face"
-                                        alt="@shadcn"
-                                    />
-                                    <AvatarFallback>SC</AvatarFallback>
-                                </Avatar>
-                            </Button>
-                        </PopoverTrigger>
-                        <PopoverContent className="w-56" align="end">
-                            <div className="flex items-center space-x-2 p-2">
-                                <Avatar className="h-8 w-8">
-                                    <AvatarImage
-                                        src="./loading.svg"
-                                        alt="avatar"
-                                    />
-                                    <AvatarFallback>SC</AvatarFallback>
-                                </Avatar>
-                                <div className="space-y-1">
-                                    <h5 className="text-sm font-semibold">
-                                        @shadcn
-                                    </h5>
-                                    <p className="text-xs text-muted-foreground">
-                                        shadcn@example.com
-                                    </p>
-                                </div>
-                            </div>
-                            <hr className="my-2" />
-                            <div className="grid gap-1">
-                                <Button
-                                    variant="ghost"
-                                    className="w-full justify-start"
-                                    size="sm"
-                                >
-                                    <User className="mr-2 h-4 w-4" />
-                                    Profile
-                                </Button>
-                                <Button
-                                    variant="ghost"
-                                    className="w-full justify-start"
-                                    size="sm"
-                                >
-                                    <Settings className="mr-2 h-4 w-4" />
-                                    Settings
-                                </Button>
-                                <hr className="my-1" />
-                                <Button
-                                    variant="ghost"
-                                    className="w-full justify-start"
-                                    size="sm"
-                                >
-                                    <LogOut className="mr-2 h-4 w-4" />
-                                    Log out
-                                </Button>
-                            </div>
-                        </PopoverContent>
-                    </Popover>
                     {/* Theme Toggle */}
                     {!mounted ? (
                         <div className="h-8 w-8"></div>
@@ -164,17 +119,118 @@ export default function Navbar() {
                             className="h-8 w-8 rounded-full border-0"
                         />
                     )}
-                    {/* Cart */}
-                    <Link href={"/cart"} aria-label="Cart">
-                        <div className="relative p-1.5 cursor-pointer">
-                            {!loading && cart && cart.numOfCartItems > 0 && (
-                                <Badge className="absolute top-0 end-0 h-4 min-w-3 rounded-full p-1 text-xs font-semi-bold translate-x-1/2">
-                                    {cart.numOfCartItems}
-                                </Badge>
-                            )}
-                            <ShoppingCart />
-                        </div>
-                    </Link>
+
+                    {/* Authenticated user */}
+                    {session.status === "authenticated" && (
+                        <>
+                            {/* Cart */}
+                            <Link href={"/cart"} aria-label="Cart">
+                                <div className="relative p-1.5 cursor-pointer">
+                                    {!loading &&
+                                        cart &&
+                                        cart.numOfCartItems > 0 && (
+                                            <Badge className="absolute top-0 end-0 h-4 min-w-3 rounded-full p-1 text-xs font-semibold translate-x-1/2 text-muted">
+                                                {cart.numOfCartItems}
+                                            </Badge>
+                                        )}
+                                    <ShoppingCart />
+                                </div>
+                            </Link>
+
+                            {/* Wishlist */}
+                            <Link href={"/wishlist"} aria-label="wishlist">
+                                <div className="relative p-1.5 cursor-pointer">
+                                    {!loading &&
+                                        wishlistContext.wishList &&
+                                        wishlistContext.wishList.count > 0 && (
+                                            <Badge className="absolute top-0 end-0 h-4 min-w-3 rounded-full p-1 text-xs font-semibold translate-x-1/2 text-muted">
+                                                {wishlistContext.wishList.count}
+                                            </Badge>
+                                        )}
+                                    <ShoppingBag />
+                                </div>
+                            </Link>
+
+                            {/* Avatar Popover */}
+                            <Popover>
+                                <PopoverTrigger asChild>
+                                    <Button
+                                        variant="ghost"
+                                        className="relative h-8 w-8 rounded-full"
+                                    >
+                                        <Avatar className="h-8 w-8 flex items-center justify-center">
+                                            <span className="text-sm font-medium">
+                                                {session.data?.user.name
+                                                    ?.split(" ")
+                                                    .map((w) => w[0])
+                                                    .join("") || (
+                                                    <AvatarFallback>
+                                                        <User2 />
+                                                    </AvatarFallback>
+                                                )}
+                                            </span>
+                                        </Avatar>
+                                    </Button>
+                                </PopoverTrigger>
+                                <PopoverContent className="w-56" align="end">
+                                    <div className="flex items-center space-x-2 p-2">
+                                        <div className="space-y-1">
+                                            <h5 className="text-sm font-semibold">
+                                                {session.data?.user.name}
+                                            </h5>
+                                            <p className="text-xs text-muted-foreground">
+                                                {session.data?.user.email}
+                                            </p>
+                                        </div>
+                                    </div>
+                                    <hr className="my-2" />
+                                    <div className="grid gap-1">
+                                        <Button
+                                            variant="ghost"
+                                            className="w-full justify-start"
+                                            size="sm"
+                                        >
+                                            <User className="mr-2 h-4 w-4" />
+                                            Profile
+                                        </Button>
+                                        <Button
+                                            variant="ghost"
+                                            className="w-full justify-start"
+                                            size="sm"
+                                        >
+                                            <Settings className="mr-2 h-4 w-4" />
+                                            Settings
+                                        </Button>
+                                        <hr className="my-1" />
+                                        <Button
+                                            variant="ghost"
+                                            className="w-full justify-start"
+                                            size="sm"
+                                            onClick={() =>
+                                                signOut({ callbackUrl: "/" })
+                                            }
+                                        >
+                                            <LogOut className="mr-2 h-4 w-4" />
+                                            Log out
+                                        </Button>
+                                    </div>
+                                </PopoverContent>
+                            </Popover>
+                        </>
+                    )}
+
+                    {/* Unauthenticated */}
+                    {session.status === "unauthenticated" && (
+                        <>
+                            <Link href={"/login"}>
+                                <Button variant="outline">Login</Button>
+                            </Link>
+                            <Link href={"/register"}>
+                                <Button>Sign Up</Button>
+                            </Link>
+                        </>
+                    )}
+
                     {/* Hamburger for mobile */}
                     <button
                         className="md:hidden ml-2 p-2 rounded focus:outline-none focus:ring"
@@ -186,13 +242,13 @@ export default function Navbar() {
                         aria-controls="mobile-navigation"
                         aria-expanded={mobileOpen}
                         aria-haspopup="true"
-                        tabIndex={0}
                         type="button"
                     >
                         <Menu className="h-6 w-6" />
                     </button>
                 </div>
             </div>
+
             {/* Mobile Navigation Drawer */}
             {mobileOpen && (
                 <div
@@ -208,23 +264,41 @@ export default function Navbar() {
                                 key={name}
                                 href={href}
                                 className="text-lg font-medium px-4 py-2 rounded hover:bg-accent transition"
-                                tabIndex={0}
                                 aria-label={name}
-                                onClick={(e) => {
-                                    e.preventDefault();
-                                    setMobileOpen(false);
-                                    window.location.href = href;
-                                }}
+                                onClick={() => setMobileOpen(false)}
                             >
                                 {name}
                             </Link>
                         ))}
+                        {session.status === "authenticated" ? (
+                            <Button
+                                variant="outline"
+                                onClick={() => {
+                                    setMobileOpen(false);
+                                    signOut({ callbackUrl: "/" });
+                                }}
+                            >
+                                Logout
+                            </Button>
+                        ) : (
+                            <>
+                                <Link
+                                    href={"/login"}
+                                    onClick={() => setMobileOpen(false)}
+                                >
+                                    <Button variant="outline">Login</Button>
+                                </Link>
+                                <Link
+                                    href={"/register"}
+                                    onClick={() => setMobileOpen(false)}
+                                >
+                                    <Button>Sign Up</Button>
+                                </Link>
+                            </>
+                        )}
                         <button
                             className="mt-8 px-4 py-2 rounded bg-muted-foreground text-background"
-                            onClick={(e) => {
-                                e.preventDefault();
-                                setMobileOpen(false);
-                            }}
+                            onClick={() => setMobileOpen(false)}
                             aria-label="Close menu"
                             type="button"
                         >

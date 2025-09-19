@@ -74,7 +74,9 @@ export default async function ProductDetails({ params }: { params: Params }) {
         <div className="container mx-auto py-10">
             <Card className="flex flex-col md:flex-row gap-8 p-6 shadow-md">
                 {/* 🖼 Interactive Images */}
+
                 <ProductImages
+                    id={id}
                     coverImage={imageCover}
                     images={images}
                     title={title}

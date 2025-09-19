@@ -1,11 +1,7 @@
 import type { Metadata } from "next";
 import { Inter, Caveat } from "next/font/google";
 import "./globals.css";
-import Navbar from "./_Components/Navbar/Navbar";
-import { ThemeProvider } from "next-themes";
-import { Footer } from "@/components/ui/footer";
-import { Toaster } from "sonner";
-import CartContextProvider from "@/context/CartContext";
+import Provider from "./_Components/Provider/Provider";
 
 const inter = Inter({
     variable: "--font-inter",
@@ -34,18 +30,7 @@ export default function RootLayout({
                 suppressHydrationWarning={true}
                 className={`${caveat.variable} ${inter.variable} antialiased`}
             >
-                <CartContextProvider>
-                    <ThemeProvider
-                        attribute="class"
-                        defaultTheme="system"
-                        enableSystem
-                    >
-                        <Navbar />
-                        <Toaster position="bottom-right" theme="system" />
-                        <div className="mt-24">{children}</div>
-                        <Footer />
-                    </ThemeProvider>
-                </CartContextProvider>
+                <Provider>{children}</Provider>
             </body>
         </html>
     );

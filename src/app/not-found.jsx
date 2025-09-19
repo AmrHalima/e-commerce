@@ -2,7 +2,7 @@ import Image from "next/image";
 
 export default function NotFound() {
     return (
-        <div className="w-full h-screen flex flex-col justify-center items-center">
+        <div className="w-full h-screen flex flex-col justify-center items-center -mt-24">
             <Image
                 className=""
                 src={"/404.svg"}

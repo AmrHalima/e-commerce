@@ -10,14 +10,17 @@ import {
     CarouselNext,
     CarouselPrevious,
 } from "@/components/ui/carousel";
+import AddToWishList from "../AddToWishList/AddToWishList";
 
 interface ProductImagesProps {
     coverImage: string;
     images: string[];
     title: string;
+    id: String;
 }
 
 export default function ProductImages({
+    id,
     coverImage,
     images,
     title,
@@ -26,8 +29,8 @@ export default function ProductImages({
 
     return (
         <div className="relative md:w-1/2 w-full space-y-4">
-            <div className="relative w-full h-[400px]">
-                <Heart className="absolute top-2 left-2 z-10 text-muted-foreground hover:text-primary transition-colors" />
+            <div className="relative w-3/4 mx-auto h-[400px]">
+                <AddToWishList productId={id} />
                 <Image
                     src={selectedImage}
                     alt={title}
