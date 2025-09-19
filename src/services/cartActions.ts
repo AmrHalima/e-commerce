@@ -12,7 +12,7 @@ export async function addToCart(productId?: string) {
         secret: process.env.AUTH_SECRET!,
     });
     try {
-        const res = await fetch("https://ecommerce.routemisr.com/api/v1/cart", {
+        const res = await fetch(`${process.env.API_URL}/cart`, {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
@@ -42,7 +42,7 @@ export async function getCart() {
         secret: process.env.AUTH_SECRET!,
     });
     try {
-        const res = await fetch(`https://ecommerce.routemisr.com/api/v1/cart`, {
+        const res = await fetch(`${process.env.API_URL}/cart`, {
             method: "GET",
             headers: {
                 "Content-Type": "application/json",
@@ -71,15 +71,12 @@ export async function removeCartItem(cartItemId: string) {
         secret: process.env.AUTH_SECRET!,
     });
     try {
-        const res = await fetch(
-            `https://ecommerce.routemisr.com/api/v1/cart/${cartItemId}`,
-            {
-                method: "DELETE",
-                headers: {
-                    token: token + "",
-                },
-            }
-        );
+        const res = await fetch(`${process.env.API_URL}/cart/${cartItemId}`, {
+            method: "DELETE",
+            headers: {
+                token: token + "",
+            },
+        });
 
         if (!res.ok) {
             toast.error("Failed to remove item from cart");
@@ -102,17 +99,14 @@ export async function updateCartItem(cartItemId: string, count: number) {
         secret: process.env.AUTH_SECRET!,
     });
     try {
-        const res = await fetch(
-            `https://ecommerce.routemisr.com/api/v1/cart/${cartItemId}`,
-            {
-                method: "PUT",
-                headers: {
-                    "Content-Type": "application/json",
-                    token: token + "",
-                },
-                body: JSON.stringify({ count }),
-            }
-        );
+        const res = await fetch(`${process.env.API_URL}/cart/${cartItemId}`, {
+            method: "PUT",
+            headers: {
+                "Content-Type": "application/json",
+                token: token + "",
+            },
+            body: JSON.stringify({ count }),
+        });
 
         if (!res.ok) {
             toast.error("Failed to update item");
@@ -135,7 +129,7 @@ export async function clearCart() {
         secret: process.env.AUTH_SECRET!,
     });
     try {
-        const res = await fetch(`https://ecommerce.routemisr.com/api/v1/cart`, {
+        const res = await fetch(`${process.env.API_URL}/cart`, {
             method: "DELETE",
             headers: {
                 token: token + "",
@@ -170,7 +164,7 @@ export async function checkOutSession(cartId: string) {
     });
     try {
         const res = await fetch(
-            `https://ecommerce.routemisr.com/api/v1/orders/checkout-session/${cartId}?url=http://localhost:3000`,
+            `${process.env.API_URL}/orders/checkout-session/${cartId}?url=http://localhost:3000`,
             {
                 method: "POST",
                 headers: {

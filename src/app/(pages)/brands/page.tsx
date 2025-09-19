@@ -5,7 +5,7 @@ import Link from "next/link";
 import React from "react";
 
 async function getBrands(): Promise<Category[]> {
-    const res = await fetch("https://ecommerce.routemisr.com/api/v1/brands", {
+    const res = await fetch(`${process.env.API_URL}/brands`, {
         next: { revalidate: 60 * 60 * 24 * 30 }, // ISR cache: 30 days
     });
 

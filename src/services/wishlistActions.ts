@@ -11,14 +11,11 @@ export async function getWishList() {
         secret: process.env.AUTH_SECRET!,
     });
     try {
-        const res = await fetch(
-            "https://ecommerce.routemisr.com/api/v1/wishList",
-            {
-                headers: {
-                    token: token + "",
-                },
-            }
-        );
+        const res = await fetch(`${process.env.API_URL}/wishList`, {
+            headers: {
+                token: token + "",
+            },
+        });
 
         if (!res.ok) {
             return null;
@@ -39,15 +36,12 @@ export async function removeFromWishlist(productId: string) {
         secret: process.env.AUTH_SECRET!,
     });
     try {
-        const res = await fetch(
-            "https://ecommerce.routemisr.com/api/v1/wishlist/" + productId,
-            {
-                method: "DELETE",
-                headers: {
-                    token: token + "",
-                },
-            }
-        );
+        const res = await fetch(`${process.env.API_URL}/wishlist` + productId, {
+            method: "DELETE",
+            headers: {
+                token: token + "",
+            },
+        });
 
         if (!res.ok) {
         } else {
@@ -65,17 +59,14 @@ export async function addToWishlist(productId: string) {
         secret: process.env.AUTH_SECRET!,
     });
     try {
-        const res = await fetch(
-            "https://ecommerce.routemisr.com/api/v1/wishlist",
-            {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                    token: token + "",
-                },
-                body: JSON.stringify({ productId }),
-            }
-        );
+        const res = await fetch(`${process.env.API_URL}/wishlist`, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                token: token + "",
+            },
+            body: JSON.stringify({ productId }),
+        });
 
         if (!res.ok) {
             console.error("failed to add to wishlist");

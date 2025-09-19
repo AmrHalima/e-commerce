@@ -6,14 +6,11 @@ import Loading from "@/app/loading";
 import Link from "next/link";
 
 async function getCategories() {
-    const res = await fetch(
-        "https://ecommerce.routemisr.com/api/v1/categories",
-        {
-            next: {
-                revalidate: 60 * 60 * 24 * 30,
-            },
-        }
-    );
+    const res = await fetch(`${process.env.API_URL}/categories`, {
+        next: {
+            revalidate: 60 * 60 * 24 * 30,
+        },
+    });
     if (res.ok) {
         const data = await res.json();
         return data.data as Category[];

@@ -1,8 +1,6 @@
 export async function getCategory(categoryId?: string) {
     const res = await fetch(
-        `https://ecommerce.routemisr.com/api/v1/categories/${
-            categoryId ? categoryId : ""
-        }`,
+        `${process.env.API_URL}/categories/${categoryId ? categoryId : ""}`,
         {
             method: "GET",
         }
