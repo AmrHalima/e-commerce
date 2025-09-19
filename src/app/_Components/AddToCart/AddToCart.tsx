@@ -10,7 +10,7 @@ import React, { useContext, useState } from "react";
 import { toast } from "sonner";
 
 export default function AddToCart({ productId }: { productId?: string }) {
-    const [loading, setLoading] = useState<Boolean>(false);
+    const [loading, setLoading] = useState<boolean>(false);
     const { setCart } = useContext(CartContext);
     const { status } = useSession();
     const router = useRouter();

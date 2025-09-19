@@ -28,7 +28,7 @@ export default function WishList() {
                     Your Wishlist is Empty
                 </h1>
                 <p className="text-muted-foreground">
-                    Looks like you haven't added anything yet.
+                    Looks like you haven&apos;t added anything yet.
                 </p>
             </div>
         );
