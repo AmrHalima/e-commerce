@@ -172,7 +172,10 @@ export default function Navbar() {
                                         </Avatar>
                                     </Button>
                                 </PopoverTrigger>
-                                <PopoverContent className="w-56" align="end">
+                                <PopoverContent
+                                    className="w-56 bg-background"
+                                    align="end"
+                                >
                                     <div className="flex items-center space-x-2 p-2">
                                         <div className="space-y-1">
                                             <h5 className="text-sm font-semibold">
