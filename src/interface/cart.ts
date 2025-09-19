@@ -22,7 +22,7 @@ export interface Data {
 export interface Item {
     count: number;
     _id: string;
-    product: Product;
+    product: Product; // No longer needs to be a string
     price: number;
 }
 

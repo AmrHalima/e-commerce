@@ -2,21 +2,22 @@
 import { Cart } from "@/interface/cart";
 import { getCart } from "@/services/cartActions";
 import { useSession } from "next-auth/react";
-import { useRouter } from "next/navigation";
-import React, { createContext, useEffect, useState } from "react";
+import React, { createContext, useEffect, useState, useCallback } from "react";
 import { toast } from "sonner";
+
+// Define the context shape
 export const CartContext = createContext<{
     cart: Cart | null;
-    setCart: React.Dispatch<React.SetStateAction<Cart | null>>;
     loading: boolean;
-    setLoading: React.Dispatch<React.SetStateAction<boolean>>;
     fetchCart: () => Promise<void>;
+    setCart: React.Dispatch<React.SetStateAction<Cart | null>>;
+    setLoading: React.Dispatch<React.SetStateAction<boolean>>;
 }>({
     cart: null,
-    setCart: () => {},
-    loading: false,
-    setLoading: () => {},
+    loading: true,
     fetchCart: async () => {},
+    setCart: () => {},
+    setLoading: () => {},
 });
 
 export default function CartContextProvider({
@@ -27,30 +28,35 @@ export default function CartContextProvider({
     const [cart, setCart] = useState<Cart | null>(null);
     const [loading, setLoading] = useState(true);
     const { status } = useSession();
-    const router = useRouter();
-    const fetchCart = async () => {
-        try {
-            if (status === "unauthenticated") {
-                router.push("/login");
-                return;
-            }
-            setLoading(true);
-            const newCart = await getCart();
-            setCart(newCart!);
-        } catch (error) {
-            if (error instanceof Error)
-                toast.error("Failed to load cart: " + error.message);
-        } finally {
+
+    const fetchCart = useCallback(async () => {
+        if (status === "unauthenticated") {
+            setCart(null);
             setLoading(false);
+            return;
         }
-    };
+        if (status === "authenticated") {
+            setLoading(true);
+            try {
+                const newCart = await getCart();
+                setCart(newCart);
+            } catch (error) {
+                if (error instanceof Error)
+                    toast.error("Failed to load cart: " + error.message);
+                setCart(null); // Clear cart on error
+            } finally {
+                setLoading(false);
+            }
+        }
+    }, [status]);
+
     useEffect(() => {
         fetchCart();
-    }, []);
+    }, [fetchCart]);
 
     return (
         <CartContext.Provider
-            value={{ cart, setCart, loading, setLoading, fetchCart }}
+            value={{ cart, loading, fetchCart, setCart, setLoading }}
         >
             {children}
         </CartContext.Provider>
