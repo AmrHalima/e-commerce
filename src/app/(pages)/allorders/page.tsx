@@ -29,7 +29,9 @@ export default function AllOrders() {
     const [orders, setOrders] = useState<Order[]>([]);
 
     async function getUserOrders(userId: string) {
-        const res = await fetch(`${process.env.API_URL}/orders/user/${userId}`);
+        const res = await fetch(
+            `https://ecommerce.routemisr.com/api/v1/orders/user/${userId}`
+        );
         if (res.ok) {
             const data = await res.json();
             setOrders(data);
