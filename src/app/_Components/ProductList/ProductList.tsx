@@ -5,14 +5,12 @@ import {
     CardDescription,
     CardTitle,
 } from "@/components/ui/card";
-import WishlistResponse, { WishlistItem } from "@/interface/wishlist"; // <-- define response interface
 import { Product } from "@/interface/product"; // <-- define product response interface
 import { StarIcon } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import AddToCart from "../AddToCart/AddToCart";
 import AddToWishList from "../AddToWishList/AddToWishList";
-import { getWishList } from "@/services/wishlistActions";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/app/api/auth/[...nextauth]/route";
 
@@ -39,13 +37,6 @@ export default async function ProductList({
     if (!products || !Array.isArray(products.data)) {
         return <div className="text-center p-10">No products found</div>;
     }
-    let wishSet = new Set<string>();
-    if (session) {
-        const wishList = (await getWishList()) as WishlistResponse;
-        wishSet = new Set(
-            wishList?.data?.map((item: WishlistItem) => item._id)
-        );
-    }
 
     return (
         <div className="p-10 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
@@ -61,16 +52,11 @@ export default async function ProductList({
                     brand,
                 } = item;
 
-                const isActive = wishSet.has(_id);
-
                 return (
                     <Card key={_id} className="w-full">
                         <CardContent className="p-3">
                             <div className="mb-2 relative">
-                                <AddToWishList
-                                    productId={_id}
-                                    isActive={isActive}
-                                />
+                                <AddToWishList productId={_id} />
                                 <Link href={`/products/${_id}`}>
                                     <Image
                                         className="h-full w-full object-cover rounded-md"
