@@ -45,6 +45,7 @@ const formSchema = z.object({
 export default function LoginForm() {
     const searchParams = useSearchParams();
     const error = searchParams.get("error");
+    const callbackUrl = searchParams.get("from");
     const [isLoading, setIsLoading] = useState(false);
     const [showPassword, setShowPassword] = useState(false);
 
@@ -62,7 +63,7 @@ export default function LoginForm() {
             email: values.email,
             password: values.password,
             redirect: true,
-            callbackUrl: "/products",
+            callbackUrl: callbackUrl ?? "/",
         });
         // If signIn fails with an error, it will redirect back with an error param.
         // We set loading to false in case the redirect doesn't happen for other reasons.
