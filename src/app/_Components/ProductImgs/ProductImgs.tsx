@@ -28,25 +28,27 @@ export default function ProductImages({
 
     return (
         <div className="relative md:w-1/2 w-full space-y-4">
-            <div className="relative w-3/4 mx-auto h-[400px]">
+            {/* Main Image */}
+            <div className="relative mx-auto aspect-square w-4/5 overflow-hidden rounded-lg border bg-muted">
                 <AddToWishList productId={id} />
                 <Image
                     src={selectedImage}
                     alt={title}
                     fill
-                    className="object-cover rounded-md"
+                    className="object-cover transition-transform duration-300 hover:scale-105"
                     quality={75}
                     priority
                 />
             </div>
 
+            {/* Thumbnails */}
             {images.length > 0 && (
-                <Carousel className="mx-auto w-2/3">
+                <Carousel className="mx-auto w-4/5">
                     <CarouselContent>
                         {images.map((img, index) => (
                             <CarouselItem
                                 key={index}
-                                className="basis-1/3 cursor-pointer"
+                                className="basis-1/4 cursor-pointer"
                                 onClick={() => setSelectedImage(img)}
                             >
                                 <div className="aspect-square w-full overflow-hidden rounded-md border border-muted">
@@ -55,8 +57,8 @@ export default function ProductImages({
                                         alt={`Thumbnail ${index}`}
                                         width={150}
                                         height={150}
-                                        className="object-cover w-full h-full transition-transform hover:scale-105"
-                                        quality={30}
+                                        className="h-full w-full object-cover transition-transform hover:scale-110"
+                                        quality={50}
                                     />
                                 </div>
                             </CarouselItem>

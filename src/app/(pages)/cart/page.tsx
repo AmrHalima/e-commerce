@@ -15,7 +15,7 @@ import { useSession } from "next-auth/react";
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { useContext, useEffect } from "react";
+import { useContext, useEffect, useState } from "react";
 import { toast } from "sonner";
 
 export function formatCurrency(num: number) {
@@ -27,6 +27,7 @@ export function formatCurrency(num: number) {
 
 export default function Cart() {
     const { cart, setCart, loading, setLoading } = useContext(CartContext);
+    const [actionLoading, setActionLoading] = useState<boolean>(false);
     const { status } = useSession();
     const router = useRouter();
 
@@ -75,7 +76,7 @@ export default function Cart() {
     // helpers for item actions
     const handleDecrease = async (productId: string, count: number) => {
         try {
-            setLoading(true);
+            setActionLoading(true);
             const newCart = await updateCartItem(productId, count - 1);
             if (newCart?.status === "success") {
                 setCart(newCart);
@@ -87,13 +88,13 @@ export default function Cart() {
             console.error("decrease error:", err);
             toast.error("Something went wrong");
         } finally {
-            setLoading(false);
+            setActionLoading(false);
         }
     };
 
     const handleIncrease = async (productId: string, count: number) => {
         try {
-            setLoading(true);
+            setActionLoading(true);
             const newCart = await updateCartItem(productId, count + 1);
             if (newCart?.status === "success") {
                 setCart(newCart);
@@ -105,13 +106,13 @@ export default function Cart() {
             console.error("increase error:", err);
             toast.error("Something went wrong");
         } finally {
-            setLoading(false);
+            setActionLoading(false);
         }
     };
 
     const handleRemove = async (productId: string) => {
         try {
-            setLoading(true);
+            setActionLoading(true);
             const newCart = await removeCartItem(productId);
             if (newCart?.status === "success") {
                 setCart(newCart);
@@ -123,13 +124,13 @@ export default function Cart() {
             console.error("remove error:", err);
             toast.error("Something went wrong");
         } finally {
-            setLoading(false);
+            setActionLoading(false);
         }
     };
 
     const handleClearCart = async () => {
         try {
-            setLoading(true);
+            setActionLoading(true);
             const res = await clearCart();
             // your API returned { message: 'success' } previously — handle safely
             if (res?.message === "success" || res?.status === "success") {
@@ -142,7 +143,7 @@ export default function Cart() {
             console.error("clearCart error:", err);
             toast.error("Something went wrong");
         } finally {
-            setLoading(false);
+            setActionLoading(false);
         }
     };
 

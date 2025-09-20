@@ -6,48 +6,112 @@
 @layer base {
     :root,
     [data-theme="light"] {
-        --primary: 187 47% 32%; /* your locked primary */
-        --foreground: 187 0% 10%; /* your locked foreground */
-        --background: 187 100% 98%; /* your locked background */
+        /* locked (kept as you requested) */
+        --primary: 187 47% 32%;
+        --foreground: 187 0% 10%;
+        --background: 187 100% 98%;
 
-        --secondary: 0 0% 96%;
-        --secondary-foreground: 0 0% 9%;
+        /* overrides from your ::root (converted to HSL approximations) */
+        --radius: 0.625rem;
 
-        --muted: 0 0% 96%;
-        --muted-foreground: 0 0% 45%;
+        --card: hsl(0 0% 100%); /* oklch(1 0 0) */
+        --card-foreground: hsl(0 0% 14.5%); /* oklch(0.145 0 0) */
 
-        --accent: 0 0% 96%;
-        --accent-foreground: 0 0% 9%;
+        --popover: hsl(0 0% 100%);
+        --popover-foreground: hsl(0 0% 14.5%);
 
-        --destructive: 0 84% 60%;
-        --destructive-foreground: 0 0% 98%;
+        /* keep primary-foreground as originally defined (unchanged) */
+        --primary-foreground: 186 100% 8%;
 
-        --border: 0 0% 90%;
-        --input: 0 0% 90%;
-        --ring: 0 0% 3%;
-        --radius: 0.5rem;
+        --secondary: hsl(0 0% 97%); /* oklch(0.97 0 0) */
+        --secondary-foreground: hsl(0 0% 20.5%); /* oklch(0.205 0 0) */
+
+        --muted: hsl(0 0% 97%); /* oklch(0.97 0 0) */
+        --muted-foreground: hsl(0 0% 55.6%); /* oklch(0.556 0 0) */
+
+        --accent: hsl(0 0% 97%); /* oklch(0.97 0 0) */
+        --accent-foreground: hsl(0 0% 20.5%); /* oklch(0.205 0 0) */
+
+        --destructive: hsl(
+            27.3 29.4% 57.7%
+        ); /* oklch(0.577 0.245 27.325) approx */
+
+        --border: hsl(0 0% 92.2%); /* oklch(0.922 0 0) */
+        --input: hsl(0 0% 92.2%); /* oklch(0.922 0 0) */
+        --ring: hsl(0 0% 70.8%); /* oklch(0.708 0 0) */
+
+        /* charts */
+        --chart-1: hsl(41.1 26.6% 64.6%); /* oklch(0.646 0.222 41.116) */
+        --chart-2: hsl(184.7 14.2% 60%); /* oklch(0.6 0.118 184.704) */
+        --chart-3: hsl(227.4 8.4% 39.8%); /* oklch(0.398 0.07 227.392) */
+        --chart-4: hsl(84.4 22.7% 82.8%); /* oklch(0.828 0.189 84.429) */
+        --chart-5: hsl(70.1 22.6% 76.9%); /* oklch(0.769 0.188 70.08) */
+
+        /* sidebar tokens */
+        --sidebar: hsl(0 0% 98.5%); /* oklch(0.985 0 0) */
+        --sidebar-foreground: hsl(0 0% 14.5%); /* oklch(0.145 0 0) */
+        --sidebar-primary: hsl(0 0% 20.5%); /* oklch(0.205 0 0) */
+        --sidebar-primary-foreground: hsl(0 0% 98.5%); /* oklch(0.985 0 0) */
+        --sidebar-accent: hsl(0 0% 97%); /* oklch(0.97 0 0) */
+        --sidebar-accent-foreground: hsl(0 0% 20.5%); /* oklch(0.205 0 0) */
+        --sidebar-border: hsl(0 0% 92.2%); /* oklch(0.922 0 0) */
+        --sidebar-ring: hsl(0 0% 70.8%); /* oklch(0.708 0 0) */
     }
 
+    /* Dark theme (approximated) */
     .dark,
     [data-theme="dark"] {
-        --primary: 184, 46%, 50%; /* keep same for brand identity */
-        --foreground: 180, 60%, 94%;
-        --background: 180, 27%, 8%;
-        --secondary: 0 0% 15%;
-        --secondary-foreground: 0 0% 98%;
+        /* keep primary/foreground/background as earlier dark values (unchanged) */
+        --primary: 184 46% 65%;
+        --foreground: 180 60% 94%;
+        --background: 180 27% 8%;
 
-        --muted: 0 0% 15%;
-        --muted-foreground: 0 0% 63%;
+        /* dark-mode approximations from your .dark block mapped to HSL/HSLA */
+        --card: hsl(0 0% 20.5%); /* oklch(0.205 0 0) */
+        --card-foreground: hsl(0 0% 98.5%);
 
-        --accent: 0 0% 15%;
-        --accent-foreground: 0 0% 98%;
+        --popover: hsl(0 0% 20.5%);
+        --popover-foreground: hsl(0 0% 98.5%);
 
-        --destructive: 0 62% 30%;
-        --destructive-foreground: 0 0% 98%;
+        /* leave primary alone (brand identity) */
+        --primary-foreground: 180 27% 8%;
 
-        --border: 0 0% 15%;
-        --input: 0 0% 15%;
-        --ring: 0 0% 83%;
+        --secondary: hsl(0 0% 26.9%); /* oklch(0.269 0 0) */
+        --secondary-foreground: hsl(0 0% 98.5%);
+
+        --muted: hsl(0 0% 26.9%);
+        --muted-foreground: hsl(0 0% 70.8%);
+
+        --accent: hsl(0 0% 26.9%);
+        --accent-foreground: hsl(0 0% 98.5%);
+
+        --destructive: hsl(
+            22.2 22.9% 70.4%
+        ); /* oklch(0.704 0.191 22.216) approx */
+
+        /* border/input with alpha */
+        --border: hsla(
+            0 0% 100% / 0.1
+        ); /* oklch(1 0 0 / 10%) approx -> white at 10% */
+        --input: hsla(0 0% 100% / 0.15); /* oklch(1 0 0 / 15%) */
+
+        --ring: hsl(0 0% 55.6%); /* oklch(0.556 0 0) */
+
+        /* dark charts (approximations) */
+        --chart-1: hsl(264.4 24.3% 48.8%); /* oklch(0.488 0.243 264.376) */
+        --chart-2: hsl(162.5 17% 69.6%); /* oklch(0.696 0.17 162.48) */
+        --chart-3: hsl(70.1 18.8% 76.9%); /* oklch(0.769 0.188 70.08) */
+        --chart-4: hsl(303.9 26.5% 62.7%); /* oklch(0.627 0.265 303.9) */
+        --chart-5: hsl(16.4 24.6% 64.5%); /* oklch(0.645 0.246 16.439) */
+
+        --sidebar: hsl(0 0% 20.5%);
+        --sidebar-foreground: hsl(0 0% 98.5%);
+        --sidebar-primary: hsl(264.4 24.3% 48.8%);
+        --sidebar-primary-foreground: hsl(0 0% 98.5%);
+        --sidebar-accent: hsl(0 0% 26.9%);
+        --sidebar-accent-foreground: hsl(0 0% 98.5%);
+        --sidebar-border: hsla(0 0% 100% / 0.1);
+        --sidebar-ring: hsl(0 0% 55.6%);
     }
 }
 
@@ -203,4 +267,32 @@ small {
     @apply font-script font-extrabold;
     letter-spacing: 0.1rem;
     line-height: 1.2;
+}
+
+html {
+    font-size: 100%;
+} /* 16px */
+
+h1 {
+    font-size: 3.053rem; /* 48.8px */
+}
+
+h2 {
+    font-size: 2.442rem; /* 39.04px */
+}
+
+h3 {
+    font-size: 1.954rem; /* 31.2px */
+}
+
+h4 {
+    font-size: 1.563rem; /* 24.96px */
+}
+
+h5 {
+    font-size: 1.25rem; /* 20px */
+}
+
+small {
+    font-size: 0.8rem; /* 12.8px */
 }

@@ -11,9 +11,7 @@ export async function generateMetadata({ params }: { params: Params }) {
     const id = (await params).productId;
     const product: Product | null = await getProducts(id?.toString());
     if (!product) {
-        return {
-            title: "Product Not Found",
-        };
+        return { title: "Product Not Found" };
     }
     if (!Array.isArray(product.data))
         return {
@@ -22,6 +20,7 @@ export async function generateMetadata({ params }: { params: Params }) {
             keywords: [product?.data.category.name, product?.data.brand.name],
         };
 }
+
 export default async function ProductDetails({ params }: { params: Params }) {
     const { productId } = await params;
     const product = await getProducts(productId?.toString());
@@ -73,9 +72,8 @@ export default async function ProductDetails({ params }: { params: Params }) {
 
     return (
         <div className="container mx-auto py-10">
-            <Card className="flex flex-col md:flex-row gap-8 p-6 shadow-md">
-                {/* 🖼 Interactive Images */}
-
+            <Card className="flex flex-col md:flex-row gap-10 p-6 shadow-md rounded-xl">
+                {/* 🖼 Product Images */}
                 <ProductImages
                     id={id}
                     coverImage={imageCover}
@@ -84,46 +82,60 @@ export default async function ProductDetails({ params }: { params: Params }) {
                 />
 
                 {/* ℹ️ Product Info */}
-                <CardContent className="flex flex-col gap-4 md:w-1/2">
-                    <CardTitle className="text-3xl font-bold">
+                <CardContent className="flex flex-col gap-6 md:w-1/2">
+                    {/* Title */}
+                    <CardTitle className="text-3xl font-bold tracking-tight">
                         {title}
                     </CardTitle>
 
-                    <div className="text-muted-foreground text-sm space-y-1">
+                    {/* Category, Brand, Description */}
+                    <div className="text-sm text-muted-foreground space-y-2 leading-relaxed">
                         <p>
-                            <strong>Category:</strong> {categoryName}
+                            <strong className="text-foreground">
+                                Category:
+                            </strong>{" "}
+                            {categoryName}
                         </p>
                         <p>
-                            <strong>Brand:</strong> {brandName}
+                            <strong className="text-foreground">Brand:</strong>{" "}
+                            {brandName}
                         </p>
                         <p>{description}</p>
-                        <p className="text-xs">Slug: {slug}</p>
+                        <p className="text-xs italic text-muted-foreground">
+                            Slug: {slug}
+                        </p>
                     </div>
 
+                    {/* Ratings */}
                     <div className="flex items-center gap-2">
                         {renderStars(ratingsAverage)}
                         <span className="text-sm text-muted-foreground">
-                            ({ratingsAverage} from {ratingsQuantity} reviews)
+                            {ratingsAverage} / 5 ({ratingsQuantity} reviews)
                         </span>
                     </div>
 
-                    <div className="flex items-center gap-4">
-                        {priceAfterDiscount && (
-                            <span className="text-lg font-semibold text-primary">
-                                {priceAfterDiscount} EGP
+                    {/* Price */}
+                    <div className="flex items-center gap-3">
+                        {priceAfterDiscount ? (
+                            <>
+                                <span className="text-2xl font-bold text-primary">
+                                    {priceAfterDiscount} EGP
+                                </span>
+                                <span className="text-sm line-through text-muted-foreground">
+                                    {price} EGP
+                                </span>
+                            </>
+                        ) : (
+                            <span className="text-2xl font-bold text-primary">
+                                {price} EGP
                             </span>
                         )}
-                        <span
-                            className={`text-sm ${
-                                priceAfterDiscount
-                                    ? "line-through text-muted-foreground"
-                                    : "font-semibold text-primary"
-                            }`}
-                        >
-                            {price} EGP
-                        </span>
                     </div>
-                    <AddToCart productId={id} />
+
+                    {/* Action */}
+                    <div>
+                        <AddToCart productId={id} />
+                    </div>
                 </CardContent>
             </Card>
         </div>

@@ -116,53 +116,27 @@ export default function Navbar() {
                             onClick={handleThemeToggle}
                             variant="circle"
                             start="top-right"
-                            className="h-8 w-8 rounded-full border-0"
+                            className="h-8 w-8 rounded-full border-border border-[1px]"
                         />
                     )}
 
                     {/* Authenticated user */}
                     {session.status === "authenticated" && (
                         <>
-                            {/* Cart */}
-                            <Link href={"/cart"} aria-label="Cart">
-                                <div className="relative p-1.5 cursor-pointer">
-                                    {!loading &&
-                                        cart &&
-                                        cart.numOfCartItems > 0 && (
-                                            <Badge className="absolute top-0 end-0 h-4 min-w-3 rounded-full p-1 text-xs font-semibold translate-x-1/2 text-muted">
-                                                {cart.numOfCartItems}
-                                            </Badge>
-                                        )}
-                                    <ShoppingCart />
-                                </div>
-                            </Link>
-
-                            {/* Wishlist */}
-                            <Link href={"/wishlist"} aria-label="wishlist">
-                                <div className="relative p-1.5 cursor-pointer">
-                                    {!loading &&
-                                        wishlistContext.wishList &&
-                                        wishlistContext.wishList.count > 0 && (
-                                            <Badge className="absolute top-0 end-0 h-4 min-w-3 rounded-full p-1 text-xs font-semibold translate-x-1/2 text-muted">
-                                                {wishlistContext.wishList.count}
-                                            </Badge>
-                                        )}
-                                    <ShoppingBag />
-                                </div>
-                            </Link>
-
                             {/* Avatar Popover */}
                             <Popover>
                                 <PopoverTrigger asChild>
                                     <Button
                                         variant="ghost"
-                                        className="relative h-8 w-8 rounded-full"
+                                        className="relative h-8 w-8 rounded-full border-border border-[1px]"
                                     >
                                         <Avatar className="h-8 w-8 flex items-center justify-center">
                                             <span className="text-sm font-medium">
                                                 {session.data?.user.name
                                                     ?.split(" ")
-                                                    .map((w) => w[0])
+                                                    .map((w) =>
+                                                        w[0].toLocaleUpperCase()
+                                                    )
                                                     .join("") || (
                                                     <AvatarFallback>
                                                         <User2 />
@@ -219,6 +193,33 @@ export default function Navbar() {
                                     </div>
                                 </PopoverContent>
                             </Popover>
+                            {/* Cart */}
+                            <Link href={"/cart"} aria-label="Cart">
+                                <div className="relative p-1.5 cursor-pointer">
+                                    {!loading &&
+                                        cart &&
+                                        cart.numOfCartItems > 0 && (
+                                            <Badge className="absolute top-0 end-0 h-4 min-w-3 rounded-full p-1 text-xs font-semibold translate-x-1/2 text-muted">
+                                                {cart.numOfCartItems}
+                                            </Badge>
+                                        )}
+                                    <ShoppingCart />
+                                </div>
+                            </Link>
+
+                            {/* Wishlist */}
+                            <Link href={"/wishlist"} aria-label="wishlist">
+                                <div className="relative p-1.5 cursor-pointer">
+                                    {!loading &&
+                                        wishlistContext.wishList &&
+                                        wishlistContext.wishList.count > 0 && (
+                                            <Badge className="absolute top-0 end-0 h-4 min-w-3 rounded-full p-1 text-xs font-semibold translate-x-1/2 text-muted">
+                                                {wishlistContext.wishList.count}
+                                            </Badge>
+                                        )}
+                                    <ShoppingBag />
+                                </div>
+                            </Link>
                         </>
                     )}
 
@@ -300,7 +301,7 @@ export default function Navbar() {
                             </>
                         )}
                         <button
-                            className="mt-8 px-4 py-2 rounded bg-muted-foreground text-background"
+                            className="mt-8 px-4 py-2 rounded bg-muted-foreground text-forground"
                             onClick={() => setMobileOpen(false)}
                             aria-label="Close menu"
                             type="button"
