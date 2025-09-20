@@ -1,9 +1,11 @@
 "use client";
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import Image from "next/image";
 import { Item } from "@/interface/cart";
+import { useSession } from "next-auth/react";
+import { CartContext } from "@/context/CartContext";
 
 interface Order {
     _id: string;
@@ -27,6 +29,7 @@ interface Order {
 
 export default function AllOrders() {
     const [orders, setOrders] = useState<Order[]>([]);
+    const { cart } = useContext(CartContext);
 
     async function getUserOrders(userId: string) {
         const res = await fetch(
@@ -41,7 +44,7 @@ export default function AllOrders() {
     }
 
     useEffect(() => {
-        getUserOrders("68c8841b9870426a3922d0d3");
+        if (cart) getUserOrders(cart?.cartId);
     }, []);
 
     return (
