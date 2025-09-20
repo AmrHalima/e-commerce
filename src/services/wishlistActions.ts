@@ -7,11 +7,13 @@ import { revalidatePath } from "next/cache";
 
 // Helper to reduce token repetition
 async function getAuthToken() {
-    const encToken = (await cookies()).get("next-auth.session-token")?.value;
+    const encToken = (await cookies()).get(
+        "__Secure-next-auth.session-token" //production cookies "__Secure-" prefix
+    )?.value;
     if (!encToken) return null;
     return await decode({
         token: encToken,
-        secret: process.env.AUTH_SECRET!,
+        secret: process.env.NEXTAUTH_SECRET!,
     });
 }
 

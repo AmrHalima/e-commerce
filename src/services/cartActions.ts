@@ -6,7 +6,9 @@ import { cookies } from "next/headers";
 import { revalidatePath } from "next/cache";
 
 async function getAuthToken() {
-    const encToken = (await cookies()).get("next-auth.session-token")?.value;
+    const encToken = (await cookies()).get(
+        "__Secure-next-auth.session-token"
+    )?.value;
     if (!encToken) return null;
     return await decode({
         token: encToken,
