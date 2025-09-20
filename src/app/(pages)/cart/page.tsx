@@ -154,7 +154,12 @@ export default function Cart() {
 
         try {
             setLoading(true);
-            if (cart) await checkOutSession(cart?.cartId);
+            if (cart) {
+                const data = await checkOutSession(cart?.cartId);
+                if (data.status == "success") {
+                    router.push(data.session.url);
+                }
+            }
             // checkOutSession will redirect on success
         } catch (err) {
             console.error("checkout error:", err);
