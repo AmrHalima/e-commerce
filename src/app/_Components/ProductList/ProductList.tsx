@@ -51,82 +51,85 @@ export default async function ProductList({
                 } = item;
 
                 return (
-                    <Card
-                        key={_id}
-                        className="w-full max-w-sm overflow-hidden rounded-xl border bg-card shadow-sm transition hover:shadow-md"
-                    >
-                        <CardContent className="p-4">
-                            {/* Image Section */}
-                            <div className="relative mb-3 aspect-square overflow-hidden rounded-lg bg-muted">
-                                <AddToWishList productId={_id} />
-                                <Link href={`/products/${_id}`}>
-                                    <Image
-                                        src={imageCover}
-                                        alt={title.replaceAll(" ", "-")}
-                                        width={360}
-                                        height={360}
-                                        quality={75}
-                                        loading="lazy"
-                                        className="h-full w-full object-cover transition-transform duration-300 hover:scale-105"
-                                    />
-                                </Link>
-                                {sold ? (
-                                    <span className="absolute bottom-2 left-2 rounded-md bg-primary/90 px-2 py-0.5 text-[11px] font-medium text-primary-foreground">
-                                        {sold}+ Sold
-                                    </span>
-                                ) : null}
-                            </div>
-
-                            {/* Title & Brand */}
-                            <CardTitle className="mb-1 line-clamp-1 text-base font-semibold">
-                                {title}
-                            </CardTitle>
-                            <CardDescription className="mb-3 text-xs text-muted-foreground">
-                                <p>{category?.name}</p>
-                                <p className="text-[11px]">
-                                    Brand: {brand?.name}
-                                </p>
-                            </CardDescription>
-
-                            {/* Ratings */}
-                            <div className="mb-3 flex items-center gap-2">
-                                <div className="flex">
-                                    {new Array(5).fill(0).map((_, i) => (
-                                        <StarIcon
-                                            key={i}
-                                            className={`h-3.5 w-3.5 ${
-                                                i < Math.floor(ratingsAverage)
-                                                    ? "fill-yellow-400 text-yellow-400"
-                                                    : "text-muted"
-                                            }`}
+                    <>
+                        <Card
+                            key={_id}
+                            className="w-full overflow-hidden rounded-xl border bg-card shadow-sm transition hover:shadow-md"
+                        >
+                            <CardContent className="p-4">
+                                {/* Image Section */}
+                                <div className="relative mb-3 aspect-square overflow-hidden rounded-lg bg-muted">
+                                    <AddToWishList productId={_id} />
+                                    <Link href={`/products/${_id}`}>
+                                        <Image
+                                            src={imageCover}
+                                            alt={title.replaceAll(" ", "-")}
+                                            width={360}
+                                            height={360}
+                                            quality={75}
+                                            loading="lazy"
+                                            className="h-full w-full object-cover transition-transform duration-300 hover:scale-105"
                                         />
-                                    ))}
-                                </div>
-                                <span className="text-xs text-muted-foreground">
-                                    {ratingsQuantity} reviews
-                                </span>
-                            </div>
-
-                            {/* Price */}
-                            <div className="mb-4 flex items-center justify-between">
-                                <div className="flex flex-col">
-                                    <span className="text-lg font-bold text-foreground">
-                                        ${priceAfterDiscount ?? price}
-                                    </span>
-                                    {priceAfterDiscount ? (
-                                        <span className="text-xs text-muted-foreground line-through">
-                                            ${price}
+                                    </Link>
+                                    {sold ? (
+                                        <span className="absolute bottom-2 left-2 rounded-md bg-primary/90 px-2 py-0.5 text-[11px] font-medium text-primary-foreground">
+                                            {sold}+ Sold
                                         </span>
                                     ) : null}
                                 </div>
-                            </div>
 
-                            {/* Actions */}
-                            <div className="flex flex-col gap-2">
-                                <AddToCart productId={_id} />
-                            </div>
-                        </CardContent>
-                    </Card>
+                                {/* Title & Brand */}
+                                <CardTitle className="mb-1 line-clamp-1 text-base font-semibold">
+                                    {title}
+                                </CardTitle>
+                                <CardDescription className="mb-3 text-xs text-muted-foreground">
+                                    <p>{category?.name}</p>
+                                    <p className="text-[11px]">
+                                        Brand: {brand?.name}
+                                    </p>
+                                </CardDescription>
+
+                                {/* Ratings */}
+                                <div className="mb-3 flex items-center gap-2">
+                                    <div className="flex">
+                                        {new Array(5).fill(0).map((_, i) => (
+                                            <StarIcon
+                                                key={i}
+                                                className={`h-3.5 w-3.5 ${
+                                                    i <
+                                                    Math.floor(ratingsAverage)
+                                                        ? "fill-yellow-400 text-yellow-400"
+                                                        : "text-muted"
+                                                }`}
+                                            />
+                                        ))}
+                                    </div>
+                                    <span className="text-xs text-muted-foreground">
+                                        {ratingsQuantity} reviews
+                                    </span>
+                                </div>
+
+                                {/* Price */}
+                                <div className="mb-4 flex items-center justify-between">
+                                    <div className="flex flex-col">
+                                        <span className="text-lg font-bold text-foreground">
+                                            ${priceAfterDiscount ?? price}
+                                        </span>
+                                        {priceAfterDiscount ? (
+                                            <span className="text-xs text-muted-foreground line-through">
+                                                ${price}
+                                            </span>
+                                        ) : null}
+                                    </div>
+                                </div>
+
+                                {/* Actions */}
+                                <div className="flex flex-col gap-2">
+                                    <AddToCart productId={_id} />
+                                </div>
+                            </CardContent>
+                        </Card>
+                    </>
                 );
             })}
         </div>

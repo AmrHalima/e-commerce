@@ -65,7 +65,7 @@ export default function Navbar() {
             : basePaths;
 
     return (
-        <nav className="w-full fixed top-0 z-50 bg-background border-b">
+        <nav className="w-full fixed top-0 z-50 bg-card border-b">
             <div className="container mx-auto flex justify-between items-center md:p-2.5 p-2">
                 {/* Logo */}
                 {!mounted ? (

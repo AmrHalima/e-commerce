@@ -29,6 +29,7 @@ export default function AddToCart({ productId }: { productId?: string }) {
                 } else toast.error("failed to add to cart");
                 setLoading(false);
             }}
+            disabled={loading ? true : false}
             variant="default"
             className="text-xs px-2 py-1 h-7"
         >
