@@ -66,7 +66,7 @@ export default function Navbar() {
 
     return (
         <nav className="w-full fixed top-0 z-50 bg-background border-b">
-            <div className="container mx-auto flex justify-between items-center md:p-4 p-2">
+            <div className="container mx-auto flex justify-between items-center md:p-2.5 p-2">
                 {/* Logo */}
                 {!mounted ? (
                     <div className="h-[64px] w-[137px]"></div>
