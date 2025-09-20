@@ -21,7 +21,6 @@ export default function AddToCart({ productId }: { productId?: string }) {
                     router.push("/login");
                     return;
                 }
-                console.log("aha");
                 setLoading(true);
                 const newCart = await addToCart(productId);
                 if (newCart) {

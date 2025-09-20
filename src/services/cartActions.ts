@@ -10,7 +10,7 @@ async function getAuthToken() {
     if (!encToken) return null;
     return await decode({
         token: encToken,
-        secret: process.env.AUTH_SECRET!,
+        secret: process.env.NEXTAUTH_SECRET!,
     });
 }
 
