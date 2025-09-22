@@ -155,7 +155,7 @@ export async function checkOutSession(cartId: string) {
 
     try {
         const res = await fetch(
-            `${process.env.API_URL}/orders/checkout-session/${cartId}?url=http://localhost:3000`,
+            `${process.env.API_URL}/orders/checkout-session/${cartId}?url=${process.env.NEXTAUTH_URL}`,
             {
                 method: "POST",
                 headers: {
