@@ -2,6 +2,8 @@ import type { Metadata } from "next";
 import { Inter, Caveat } from "next/font/google";
 import "./globals.css";
 import Provider from "./_Components/Provider/Provider";
+import { Analytics } from "@vercel/analytics/next";
+import { SpeedInsights } from "@vercel/speed-insights/next";
 
 const inter = Inter({
     variable: "--font-inter",
@@ -31,6 +33,8 @@ export default function RootLayout({
                 className={`${caveat.variable} ${inter.variable} antialiased`}
             >
                 <Provider>{children}</Provider>
+                <SpeedInsights />
+                <Analytics />
             </body>
         </html>
     );
